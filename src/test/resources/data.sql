@@ -57,3 +57,9 @@ INSERT INTO `series_production` (`series_id`, `production_id`) VALUES
 (3, 1),
 (3, 2)
 ;
+
+-- seasons
+INSERT INTO `seasons` (`series_id`, `season_number`, `summary`, `release_year`, `imdb_rating`) VALUES
+(3, 1, 'The series starts with the first season of House of Cards.', 2013, 9.1),
+(3, 2, 'The series starts with the second season of House of Cards.', 2014, 9.0)
+;

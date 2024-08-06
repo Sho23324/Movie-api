@@ -3,6 +3,8 @@ package com.example.movie_api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -25,11 +27,13 @@ public class Season {
     @Column(name = "imdb_rating")
     private Double imdb_rating;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "series_id", nullable = false)
+    @JsonIgnoreProperties(value = {"seasons"}, allowSetters = true)
     private Series series;
 
     @OneToMany(mappedBy = "season")
+    @JsonIgnoreProperties("season")
     private Set<Episode> episodes = new HashSet<Episode>();
 
     @ManyToMany
@@ -40,15 +44,11 @@ public class Season {
     )
     private Set<Rating> ratings = new HashSet<Rating>();
 
-    public Season(Integer season_number, String summary, Integer release_year, Double imdb_rating, Series series,
-            Set<Episode> episodes, Set<Rating> ratings) {
+    public Season(Integer season_number, String summary, Integer release_year, Double imdb_rating) {
         this.season_number = season_number;
         this.summary = summary;
         this.release_year = release_year;
         this.imdb_rating = imdb_rating;
-        this.series = series;
-        this.episodes = episodes;
-        this.ratings = ratings;
     }
 
     public Season() {
@@ -110,11 +110,36 @@ public class Season {
         this.episodes = episodes;
     }
 
-    public Set<Rating> getRatsings() {
+    public Set<Rating> getRatings() {
         return ratings;
     }
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Season other = (Season) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 }
