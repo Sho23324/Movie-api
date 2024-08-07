@@ -33,7 +33,7 @@ public class Season {
     private Series series;
 
     @OneToMany(mappedBy = "season")
-    @JsonIgnoreProperties("season")
+    @JsonIgnoreProperties(value =  {"season"}, allowSetters = true)
     private Set<Episode> episodes = new HashSet<Episode>();
 
     @ManyToMany

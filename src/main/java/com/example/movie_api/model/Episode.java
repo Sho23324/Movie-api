@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -32,16 +34,14 @@ public class Episode {
         joinColumns = @JoinColumn(name="episode_id"),
         inverseJoinColumns = @JoinColumn(name="rating_id")
     )
+    @JsonIgnoreProperties({"movies", "series", "seasons", "episodes"})
     private Set<Rating> ratings = new HashSet<Rating>();
 
-    public Episode(Integer episode_number, String title, Date air_date, Double imdb_rating, Set<Rating> ratings,
-            Season season) {
+    public Episode(Integer episode_number, String title, Date air_date, Double imdb_rating) {
         this.episode_number = episode_number;
         this.title = title;
         this.air_date = air_date;
         this.imdb_rating = imdb_rating;
-        this.ratings = ratings;
-        this.season = season;
     }
 
     public Episode() {
@@ -49,6 +49,7 @@ public class Episode {
 
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
+    @JsonIgnoreProperties(value = {"episodes"}, allowSetters = true)
     private Season season;
 
     public Long getId() {
@@ -105,5 +106,30 @@ public class Episode {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Episode other = (Episode) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 }
