@@ -3,6 +3,8 @@ package com.example.movie_api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -25,11 +27,13 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
+    @JsonIgnoreProperties(value = {"users"}, allowSetters = true)
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
     private Set<Rating> ratings = new HashSet<Rating>();
 
     public Set<Rating> getRatings() {
@@ -40,13 +44,11 @@ public class User {
         this.ratings = ratings;
     }
 
-    public User(String username, String displayname, String email, String password, Role role, Set<Rating> ratings) {
+    public User(String username, String displayname, String email, String password) {
         this.username = username;
         this.displayname = displayname;
         this.email = email;
         this.password = password;
-        this.role = role;
-        this.ratings = ratings;
     }
 
     public User() {

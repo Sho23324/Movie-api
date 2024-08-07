@@ -3,6 +3,8 @@ package com.example.movie_api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,11 +19,12 @@ public class Role {
     private String name;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnoreProperties(value = {"role"}, allowSetters = true)
     private Set<User> users = new HashSet<User>();
 
-    public Role(String name, Set<User> users) {
+    public Role(String name) {
         this.name = name;
-        this.users = users;
+
     }
 
     public Role() {

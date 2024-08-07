@@ -23,8 +23,8 @@ import com.example.movie_api.model.Season;
 public class EpisodeTest {
     @Autowired
     private TestRestTemplate restTemplate;
-    
-    //this is essential for Date data type
+
+    //this is essential for Date data type// and don't give the date null!!!!
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
@@ -46,7 +46,7 @@ public class EpisodeTest {
 
     }
 
-    @Test//why uri is null?
+    @Test//why uri is null?->because date is null
     @DirtiesContext
     void createEpisode() throws ParseException {
         Episode episode = new Episode(3, "The Wire", df.parse("2013-11-14"), 9.0);
@@ -58,7 +58,7 @@ public class EpisodeTest {
         assertThat(response.getBody().getImdb_rating()).isEqualTo(episode.getImdb_rating());
     }
 
-    @Test//there is no update
+    @Test//there is no update->because date is null 
     @DirtiesContext
     void updateEpisode() throws ParseException {
         Episode episode = new Episode(1, "The Wire updated", df.parse("2013-11-14"), 9.0);

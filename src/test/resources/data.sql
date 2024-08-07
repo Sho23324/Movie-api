@@ -71,3 +71,8 @@ INSERT INTO `episodes` (`season_id`, `episode_number`, `title`, `air_date`, `imd
 (1, 2, 'The Second Episode', '2013-8-15', 9.0)
 ;
 
+INSERT INTO `users` (`username`, `displayname`, `email`, `password`, `role_id`) VALUES
+('admin', 'Admin', 'admin@localhost', 'admin', 1),
+('user', 'User', 'user@localhost', 'user', 2),
+('user2', 'User2', 'user2@localhost', 'user2', 2)
+;
